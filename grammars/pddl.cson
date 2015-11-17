@@ -1,0 +1,1022 @@
+fileTypes: [
+  "pddl"
+]
+name: "PDDL"
+patterns: [
+  {
+    include: "#problem"
+  }
+  {
+    include: "#domain"
+  }
+  {
+    include: "#comment"
+  }
+]
+repository:
+  action:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:action))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Action"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#action-name"
+          }
+          {
+            include: "#comment"
+          }
+          {
+            include: "#typed-variable-list"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            include: "#action-keyword"
+          }
+          {
+            include: "#built-in-var"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  "action-keyword":
+    match: ":(?i:(parameters|vars|precondition|effect))(?!:|\\?)\\b"
+    name: "keyword.operator.pddl"
+  "action-name":
+    captures:
+      "1":
+        name: "string.unquoted.action.pddl"
+    match: "(?:^|\\s+)([a-zA-Z](?:\\w|-|_)*)(?!:|\\?)\\b"
+  "any-sexpr":
+    patterns: [
+      {
+        begin: "\\("
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#any-sexpr-other"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            match: "(?:\\s)*"
+          }
+        ]
+      }
+    ]
+  "any-sexpr-other":
+    patterns: [
+      {
+        begin: "\\("
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#any-sexpr"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            match: "(?:\\s)*"
+          }
+        ]
+      }
+    ]
+  "applied-predicate":
+    patterns: [
+      {
+        begin: "\\(\\s*((?:\\w|-)+)"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#applied-predicate-other"
+          }
+        ]
+      }
+    ]
+  "applied-predicate-other":
+    patterns: [
+      {
+        begin: "\\(\\s*((?:\\w|-)+)"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#variable"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#comment"
+          }
+        ]
+      }
+    ]
+  "built-in-var":
+    match: "\\?duration"
+    name: "variable.language.pddl"
+  comment:
+    comment: "Comments beginning with ';'"
+    match: ";.*"
+    name: "comment.line.semicolon.pddl"
+  "connected-predicate":
+    patterns: [
+      {
+        begin: "\\((and|or|eq|neq|not|\\=|\\>\\=|\\<\\=||\\<|\\>|assign|increase|decrease|scale-up|scale-down|forall|exists|imply|when|\\+|-|\\*|/)\\s+"
+        beginCaptures:
+          "1":
+            name: "string.unquoted.pddl"
+        comment: "Predicates that are connected via and, or, etc."
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#times"
+          }
+          {
+            include: "#typed-variable-list"
+          }
+          {
+            include: "#connected-predicate-other"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            include: "#number"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  "connected-predicate-other":
+    patterns: [
+      {
+        begin: "\\((and|or|eq|neq|not|\\=|\\>\\=|\\<\\=|\\<|\\>|assign|increase|decrease|scale-up|scale-down|forall|exists|imply|when|\\+|-|\\*|/)\\s+"
+        beginCaptures:
+          "1":
+            name: "string.unquoted.pddl"
+        comment: "Predicates that are connected via and, or, etc."
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#times"
+          }
+          {
+            include: "#typed-variable-list"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#number"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  constants:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:constants))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Constants"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            captures:
+              "1":
+                name: "entity.name.function.pddl"
+              "2":
+                name: "entity.name.tag.pddl"
+            match: "(-)(?:^|\\s+)([a-zA-Z](?:\\w|-|_)*)"
+            name: "meta.keyword.pddl"
+          }
+          {
+            include: "#either"
+          }
+          {
+            include: "#pddl-expr"
+          }
+        ]
+      }
+    ]
+  derived:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:derived))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Derived Predicate"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#predicate"
+          }
+          {
+            include: "#variable-list"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  domain:
+    patterns: [
+      {
+        begin: "\\(\\s*((?i:define))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "domain definition "
+        end: "\\)"
+        name: "meta.function.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#domain-name-in-define"
+          }
+          {
+            include: "#requirement"
+          }
+          {
+            include: "#types"
+          }
+          {
+            include: "#constants"
+          }
+          {
+            include: "#predicates"
+          }
+          {
+            include: "#derived"
+          }
+          {
+            include: "#new-functions"
+          }
+          {
+            include: "#action"
+          }
+          {
+            include: "#durative-action"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  "domain-name-in-define":
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(domain))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Domain name in problem file"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            match: "(\\s+(?:\\w|-)+){2,}"
+            name: "invalid.illegal.pddl"
+          }
+          {
+            include: "#pddl-expr"
+          }
+        ]
+      }
+    ]
+  "domain-name-in-problem":
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:domain))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Domain name in problem file"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            match: "(\\s+(?:\\w|-)+){2,}"
+            name: "invalid.illegal.pddl"
+          }
+          {
+            include: "#pddl-expr"
+          }
+        ]
+      }
+    ]
+  "durative-action":
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:durative-action))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Durative Action"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#typed-variable-list"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#comment"
+          }
+          {
+            include: "#durative-action-keyword"
+          }
+          {
+            include: "#built-in-var"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  "durative-action-keyword":
+    match: ":(?i:(parameters|vars|duration|condition|effect))(?!:|\\?)\\b"
+    name: "keyword.operator.pddl"
+  either:
+    patterns: [
+      {
+        begin: "(-)\\s+\\((either)"
+        beginCaptures:
+          "1":
+            name: "constant.character.pddl"
+          "2":
+            name: "storage.type.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#comment"
+          }
+        ]
+      }
+    ]
+  error:
+    captures:
+      "1":
+        name: "invalid.illegal.pddl"
+    match: "\\s*((?:\\w+|\\?|_|-|\\.))\\s*"
+  function:
+    patterns: [
+      {
+        begin: "\\(\\s*((?:\\w|-)+)"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        end: "(\\)\\s+-\\s+((?:\\w|-)+))"
+        endCaptures:
+          "2":
+            name: "storage.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            captures:
+              "1":
+                name: "entity.name.function.pddl"
+            match: "-\\s+((?:\\w|-)+)"
+            name: "meta.name.function.pddl"
+          }
+        ]
+      }
+    ]
+  "function-keyword":
+    comment: "Function keywords that can be used in the effect of an action"
+    match: "(assign|scale-up|scale-down|increase|decrease)"
+    name: "support.function.pddl"
+  "function-with-either":
+    patterns: [
+      {
+        begin: "\\((\\w+)"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        end: "(\\)\\s+-\\s+((?:\\w|-)+))|\\)"
+        endCaptures:
+          "2":
+            name: "storage.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            captures:
+              "1":
+                name: "entity.name.function.pddl"
+            match: "-\\s+((?:\\w|-)+)"
+            name: "meta.name.function.pddl"
+          }
+        ]
+      }
+    ]
+  functions:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:functions))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Functions"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#function"
+          }
+          {
+            begin: "\\((either)"
+            beginCaptures:
+              "1":
+                name: "entity.name.function.pddl"
+              "2":
+                name: "storage.type.pddl"
+            end: "\\)"
+            patterns: [
+              {
+                include: "#pddl-expr"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  goal:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:goal))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Goal"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#comment"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  "init-predicate":
+    patterns: [
+      {
+        begin: "\\(\\s*((?:\\w|-)+)"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#number"
+          }
+          {
+            include: "#init-predicate-other"
+          }
+        ]
+      }
+    ]
+  "init-predicate-other":
+    patterns: [
+      {
+        begin: "\\(\\s*((?:\\w|-)+)"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#number"
+          }
+          {
+            include: "#init-predicate"
+          }
+          {
+            include: "#comment"
+          }
+        ]
+      }
+    ]
+  inits:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:init))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Initalized predicates"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#init-predicate"
+          }
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  metric:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:metric))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Metric"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#optimization"
+          }
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#comment"
+          }
+          {
+            include: "#number"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  "new-functions":
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:functions))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Functions"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#either"
+          }
+          {
+            include: "#predicate"
+          }
+          {
+            include: "#pddl-expr"
+          }
+        ]
+      }
+    ]
+  number:
+    comment: "Numeric values"
+    match: "\\b\\d*\\.?\\d*\\b"
+    name: "constant.numeric.pddl"
+  objects:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:objects))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Objects"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            captures:
+              "1":
+                name: "entity.name.function.pddl"
+              "2":
+                name: "entity.name.tag.pddl"
+            match: "(-)(?:^|\\s+)([a-zA-Z](?:\\w|-|_)*)"
+            name: "meta.keyword.pddl"
+          }
+          {
+            include: "#either"
+          }
+          {
+            include: "#pddl-expr"
+          }
+        ]
+      }
+    ]
+  optimization:
+    match: "(minimize|maximize)"
+    name: "keyword.other.pddl"
+  "pddl-expr":
+    captures:
+      "1":
+        name: "string.unquoted.pddl"
+    match: "(?:^|\\s+)([a-zA-Z](?:\\w|-|_)*)(?!:|\\?)\\b"
+  precondition:
+    patterns: [
+      {
+        begin: ":precondition\\s*"
+        end: "\\b"
+        name: "entity.name.function.pddl"
+      }
+    ]
+  predicate:
+    patterns: [
+      {
+        begin: "\\(\\s*((?:\\w|-)+)"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            include: "#either"
+          }
+          {
+            captures:
+              "1":
+                name: "constant.character.pddl"
+              "2":
+                name: "entity.name.function.pddl"
+            match: "(-)(?:^|\\s+)([a-zA-Z](?:\\w|-|_)*)"
+            name: "meta.name.function.pddl"
+          }
+        ]
+      }
+    ]
+  predicates:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:predicates))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Predicates"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#predicate"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  problem:
+    patterns: [
+      {
+        begin: "\\(\\s*((?i:define))\\b(?!\\s+\\(domain)"
+        beginCaptures:
+          "1":
+            name: "storage.type.function-type.pddl"
+        comment: "problem definition"
+        end: "\\)"
+        name: "meta.function.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#problem-name-in-define"
+          }
+          {
+            include: "#domain-name-in-problem"
+          }
+          {
+            include: "#inits"
+          }
+          {
+            include: "#objects"
+          }
+          {
+            include: "#goal"
+          }
+          {
+            include: "#metric"
+          }
+        ]
+      }
+    ]
+  "problem-name-in-define":
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(problem))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Domain name in problem file"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            match: "(\\s+(?:\\w|-)+){2,}"
+            name: "invalid.illegal.pddl"
+          }
+          {
+            include: "#pddl-expr"
+          }
+        ]
+      }
+    ]
+  requirement:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:requirements))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Requirement"
+        end: "\\)"
+        name: "meta.type.requirement.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            match: ":(?i:(strips|typing|negative-preconditions|disjunctive-preconditions|equality|existential-preconditions|universal-preconditions|quantified-preconditions|conditional-effects|fluents|numeric-fluents|object-fluents|adl|durative-actions|duration-inequalities|continuous-effects|derived-predicates|timed-initial-literals|preferences|constraints|action-costs))\\b"
+            name: "keyword.other.pddl"
+          }
+        ]
+      }
+    ]
+  times:
+    patterns: [
+      {
+        begin: "\\((forall|(at(\\s+(start|end)))|over(\\s+all)?)\\s*"
+        beginCaptures:
+          "1":
+            name: "entity.name.function.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#connected-predicate"
+          }
+          {
+            include: "#applied-predicate"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  "typed-variable-list":
+    patterns: [
+      {
+        begin: "\\((\\?((?:\\w|-|_)+))"
+        beginCaptures:
+          "1":
+            name: "keyword.other.pddl"
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#variable"
+          }
+          {
+            captures:
+              "1":
+                name: "constant.character.pddl"
+              "2":
+                name: "entity.name.function.pddl"
+            match: "(-)(?:^|\\s+)([a-zA-Z](?:\\w|-|_)*)(?!:|\\?)\\b"
+            name: "meta.name.function.pddl"
+          }
+        ]
+      }
+    ]
+  types:
+    patterns: [
+      {
+        begin: "\\(\\s*(?i:(:types))\\b"
+        beginCaptures:
+          "1":
+            name: "storage.type.pddl"
+        comment: "Types"
+        end: "\\)"
+        name: "meta.type.pddl"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            captures:
+              "1":
+                name: "constant.character.pddl"
+              "2":
+                name: "entity.name.function.pdd"
+            match: "(-)(?:^|\\s+)([a-zA-Z](?:\\w|-|_)*)"
+            name: "meta.keyword.pddl"
+          }
+          {
+            include: "#either"
+          }
+          {
+            include: "#pddl-expr"
+          }
+          {
+            include: "#any-sexpr"
+          }
+        ]
+      }
+    ]
+  variable:
+    match: "(?:^|\\s+)(\\?[a-zA-Z](?:\\w|-|_)*)"
+    name: "keyword.other.pddl"
+  "variable-list":
+    patterns: [
+      {
+        begin: "\\("
+        end: "\\)"
+        patterns: [
+          {
+            include: "#comment"
+          }
+          {
+            include: "#variable"
+          }
+        ]
+      }
+    ]
+scopeName: "source.pddl"

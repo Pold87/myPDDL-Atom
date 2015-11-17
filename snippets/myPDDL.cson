@@ -1,0 +1,196 @@
+"*":
+  action:
+    prefix: "action"
+    body: '''
+      
+      (:action ${1:action-name}
+        :parameters (?${2:x} - ${3:object})
+        :precondition (and ($4))
+        :effect (and ($5)))
+      
+    '''
+".source.pddl":
+  domain:
+    prefix: "domain"
+    body: '''
+      
+      (define (domain ${1:domain-name})
+      
+        (:requirements 
+      ${2:    :typing}
+        )
+      
+        (:types
+          ${3:subtype1} ${4:subtype2} ${5:subtype3} - ${6:object}
+        )
+      
+        (:predicates
+          (${7:predicateName} ${8:?x} - ${9:object} ${10:?y} - ${11:object}) 	
+        ) 
+      
+        (:action ${12:action-name}
+          :parameters ($13)
+          :precondition ($14)
+          :effect ($15))
+      
+      )
+      
+      
+    '''
+  "durative-domain":
+    prefix: "durative-domain"
+    body: '''
+      
+      (define (domain ${1:domainName})
+      
+      	(:requirements 
+      ${2:		:durative-actions}
+      ${3:		:equality}
+      ${4:		:negative-preconditions}
+      ${5:		:numeric-fluents}
+      ${6:		:object-fluents}
+      ${7:		:typing}
+      	)
+      
+      	(:types
+      
+      	)
+      
+      	(:constants
+      
+      	)
+      
+        	(:predicates
+        	
+        	) 
+      
+        	(:functions
+        
+      	)
+      
+       	(:durative-action ${8:actionName}
+      		:parameters (?${9:x} - ${10:<objectType>})
+      		:duration (= ?duration ${11:#duration})
+      		:condition (at start ${12:<effects>})
+      		:effect (at end ${13:<effects>}))
+      )
+      
+    '''
+  f1:
+    prefix: "f1"
+    body: '''
+      
+      (${1:functionName} ?${2:x}) - ${3:returnType}
+      
+    '''
+  f2:
+    prefix: "f2"
+    body: '''
+      
+      (${1:function-name} ?${2:x} ?${3:y}) - ${4:return-type}
+      
+    '''
+  f3:
+    prefix: "f3"
+    body: '''
+      
+      (${1:functionName} ?${2:x} ?${3:y} ?${4:z}) - ${5:return-type}
+      
+    '''
+  p1:
+    prefix: "p1"
+    body: '''
+      
+      (${1:predicateName} ${2:?x} - ${3:object})
+      
+    '''
+  p2:
+    prefix: "p2"
+    body: '''
+      
+      (${1:predicateName} ${2:?x} - ${3:object} ${4:?y} - ${5:object})
+      
+    '''
+  p3:
+    prefix: "p3"
+    body: '''
+      
+      (${1:predicateName} ${2:?x} - ${3:object} ${4:?y} - ${5:object} ${6:?z} - ${7:object})
+      
+    '''
+  problem:
+    prefix: "problem"
+    body: '''
+      
+      (define (problem ${1:problem-name})
+      	
+        (:domain ${2:domain-name})
+      
+        (:objects
+          ${3:object1} - ${4:object}
+        )
+      
+        (:init
+          (${5:predicate-name} ${6:object1})
+        	
+        ) 
+      
+        (:goal
+      
+        ))
+      
+    '''
+  t1:
+    prefix: "t1"
+    body: '''
+      
+      ${1:subtype1} - ${2:object}
+      
+    '''
+  t2:
+    prefix: "t2"
+    body: '''
+      
+      ${1:subtype1} ${2:subtype2} - ${3:object}
+      
+    '''
+  t3:
+    prefix: "t3"
+    body: '''
+      
+      ${1:subtype1} ${2:subtype2} ${3:subtype3} - ${4:object}
+      
+    '''
+  type:
+    prefix: "type"
+    body: '''
+      
+      ${1:newType} - ${2:object}
+      
+    '''
+".text.pddl":
+  domain_exp:
+    prefix: "(domain"
+    body: '''
+      
+      (define (domain ${1:new-domain})
+      
+      	(:requirements 
+             :typing)
+      	
+      	(:types
+      		${2:subtype1} ${3:subtype2} - ${4:object}
+      	$0))
+      
+    '''
+  "durative-action":
+    prefix: "durative-action"
+    body: '''
+      
+      (:durative-action ${1:action-name}
+      	:parameters (?${2:x} - ${3:object})
+      	:duration (= ?duration ${4:100})
+      	:condition (at start ${5:()})
+      	:effect (at end ${6:()}))
+      
+    '''

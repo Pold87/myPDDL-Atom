@@ -1,0 +1,18 @@
+{
+  "name": "mypddl",
+  "main": "./lib/mypddl",
+  "version": "0.1.0",
+  "description": "Syntax Highlighting for PDDL",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": "mypddl:toggle"
+  },
+  "repository": "https://github.com/Pold87/myPDDL-Atom",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}
