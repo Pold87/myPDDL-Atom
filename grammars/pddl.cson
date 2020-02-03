@@ -26,6 +26,9 @@ repository:
         name: "meta.type.pddl"
         patterns: [
           {
+            include: "#typed-variable-list"
+          }
+          {
             include: "#connected-predicate"
           }
           {
@@ -36,9 +39,6 @@ repository:
           }
           {
             include: "#comment"
-          }
-          {
-            include: "#typed-variable-list"
           }
           {
             include: "#variable"
@@ -108,7 +108,7 @@ repository:
   "applied-predicate":
     patterns: [
       {
-        begin: "\\(\\s*((?:\\w|-)+)"
+        begin: "\\(\\s*(((?:\\w|-)+|\\=|\\>\\=|\\<\\=||\\<|\\>|\\+|-|\\*|/))"
         beginCaptures:
           "1":
             name: "storage.type.pddl"
@@ -132,7 +132,7 @@ repository:
   "applied-predicate-other":
     patterns: [
       {
-        begin: "\\(\\s*((?:\\w|-)+)"
+        begin: "\\(\\s*(((?:\\w|-)+|\\=|\\>\\=|\\<\\=||\\<|\\>|\\+|-|\\*|/))"
         beginCaptures:
           "1":
             name: "storage.type.pddl"
@@ -163,7 +163,7 @@ repository:
   "connected-predicate":
     patterns: [
       {
-        begin: "\\((and|or|eq|neq|not|\\=|\\>\\=|\\<\\=||\\<|\\>|assign|increase|decrease|scale-up|scale-down|forall|exists|imply|when|\\+|-|\\*|/)\\s+"
+        begin: "\\((and|or|eq|neq|not|forall|exists|imply|when)\\s+"
         beginCaptures:
           "1":
             name: "string.unquoted.pddl"
@@ -204,7 +204,7 @@ repository:
   "connected-predicate-other":
     patterns: [
       {
-        begin: "\\((and|or|eq|neq|not|\\=|\\>\\=|\\<\\=|\\<|\\>|assign|increase|decrease|scale-up|scale-down|forall|exists|imply|when|\\+|-|\\*|/)\\s+"
+        begin: "\\((and|or|eq|neq|not|forall|exists|imply|when)\\s+"
         beginCaptures:
           "1":
             name: "string.unquoted.pddl"
@@ -658,6 +658,9 @@ repository:
             include: "#comment"
           }
           {
+            include: "#applied-predicate"
+          }
+          {
             include: "#init-predicate"
           }
           {
@@ -915,7 +918,7 @@ repository:
   times:
     patterns: [
       {
-        begin: "\\((forall|(at(\\s+(start|end)))|over(\\s+all)?)\\s*"
+        begin: "\\(((at(\\s+(start|end)))|over(\\s+all)?)\\s*"
         beginCaptures:
           "1":
             name: "entity.name.function.pddl"
